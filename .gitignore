@@ -13,3 +13,6 @@
 
 # IntelliJ
 .idea/
+
+# Provate Key
+privateKey

@@ -16,6 +16,10 @@ Alternatively, you can use kubectl to deploy:
 ```shell script
 $ kubectl -n cert-manager apply -f https://raw.githubusercontent.com/robbietjuh/cert-manager-webhook-transip/master/deploy/recommended.yaml
 ```
+or
+```shell script
+$ kubectl -n cert-manager apply -f ./deploy/recommended.yaml
+```
 
 Both methods will simply deploy the webhook container into your Kubernetes environment. After deployment, you'll have to configure the webhook to interface with your TransIP account.
 
@@ -23,9 +27,18 @@ Both methods will simply deploy the webhook container into your Kubernetes envir
 
 The webhook needs your TransIP account name and your API private key. The private key must be deployed as a secret.
 
+**Important**: As the filename determines the key for the secret, make sure your key is called `privateKey` or specify the
+key explicitly!
+
 ```shell script
 # Given your private key is in the file privateKey
 kubectl -n cert-manager create secret generic transip-credentials --from-file=privateKey
+```
+
+If you used `kubectl apply -f` for the installation, you might need to add the secret to the default namespace:
+```shell script
+# Given your private key is in the file privateKey
+kubectl -n default create secret generic transip-credentials --from-file=privateKey
 ```
 
 After saving your private key as a secret to the cluster, you'll have to configure the Issuer object. You can use the following as a template:
